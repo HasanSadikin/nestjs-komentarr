@@ -5,8 +5,6 @@ import { LikeModule } from './like/like.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { OtpService } from './otp/otp.service';
-import { CryptojsService } from './cryptojs/cryptojs.service';
 
 @Module({
   imports: [
@@ -16,8 +14,9 @@ import { CryptojsService } from './cryptojs/cryptojs.service';
     }),
     ThrottlerModule.forRoot([
       {
-        ttl: 5000,
-        limit: 1,
+        // ttl: 1000 * 60 * 15,
+        ttl: 0,
+        limit: 100,
       },
     ]),
     CommentModule,

@@ -5,11 +5,12 @@ import { PrismaService } from 'src/prisma.service';
 export class CommentService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getNestedComments_One(clusterId: string) {
+  async getNestedComments_One(clusterId: string, scope: string) {
     return this.prisma.comment.findMany({
       where: {
         clusterId: clusterId,
         parentId: null,
+        scope: scope,
       },
       include: {
         replies: {
@@ -24,11 +25,12 @@ export class CommentService {
     });
   }
 
-  async getNestedComments_Two(clusterId: string) {
+  async getNestedComments_Two(clusterId: string, scope: string) {
     return this.prisma.comment.findMany({
       where: {
         clusterId: clusterId,
         parentId: null,
+        scope: scope,
       },
       include: {
         replies: {
@@ -71,11 +73,12 @@ export class CommentService {
     return depth;
   }
 
-  async getNestedComments_Three(clusterId: string) {
+  async getNestedComments_Three(clusterId: string, scope: string) {
     return this.prisma.comment.findMany({
       where: {
         clusterId: clusterId,
         parentId: null,
+        scope: scope,
       },
       include: {
         replies: {
@@ -107,10 +110,6 @@ export class CommentService {
       where: {
         id: id,
       },
-      include: {
-        likes: true,
-        dislikes: true,
-      },
     });
   }
 
@@ -120,6 +119,7 @@ export class CommentService {
       parentId?: string;
       authorId: string;
       content: string;
+      scope: string;
     },
   ) {
     return this.prisma.comment.create({
@@ -128,6 +128,7 @@ export class CommentService {
         authorId: comment.authorId,
         clusterId: clusterId,
         content: comment.content,
+        scope: comment.scope,
       },
     });
   }

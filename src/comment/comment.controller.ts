@@ -1,7 +1,5 @@
 import {
-  BadRequestException,
   Body,
-  ConflictException,
   Controller,
   Delete,
   Get,
@@ -10,6 +8,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
@@ -26,15 +25,16 @@ export class CommentController {
   async getAllComments(
     @Param('clusterId') clusterId: string,
     @Param('nested', ParseIntPipe) nested: number,
+    @Query('scope') scope: string,
   ) {
     switch (nested) {
       case 2:
-        return this.commentService.getNestedComments_Two(clusterId);
+        return this.commentService.getNestedComments_Two(clusterId, scope);
       case 3:
-        return this.commentService.getNestedComments_Three(clusterId);
+        return this.commentService.getNestedComments_Three(clusterId, scope);
       case 1:
       default:
-        return this.commentService.getNestedComments_One(clusterId);
+        return this.commentService.getNestedComments_One(clusterId, scope);
     }
   }
 
@@ -48,7 +48,13 @@ export class CommentController {
   async postComment(
     @Param('id') clusterId: string,
     @Param('nested', ParseIntPipe) nested: number,
-    @Body() postData: { authorId: string; parentId?: string; content: string },
+    @Body()
+    postData: {
+      authorId: string;
+      parentId?: string;
+      content: string;
+      scope: string;
+    },
   ) {
     const depth = await this.commentService.getDepth(postData.parentId);
 

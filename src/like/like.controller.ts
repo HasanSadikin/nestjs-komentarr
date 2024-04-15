@@ -24,6 +24,16 @@ export class LikeController {
     return this.likeService.like(postData.userId, commentId);
   }
 
+  @Get('like/:clusterId/:commentId')
+  async getLike(@Param('commentId') commentId: string) {
+    return this.likeService.getLike(commentId);
+  }
+
+  @Get('dislike/:clusterId/:commentId')
+  async getDislike(@Param('commentId') commentId: string) {
+    return this.likeService.getDislike(commentId);
+  }
+
   @Delete('like/:clusterId/:commentId')
   async unlike(
     @Param('commentId') commentId: string,

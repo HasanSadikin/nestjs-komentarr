@@ -4,6 +4,23 @@ import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class LikeService {
   constructor(private readonly prismaService: PrismaService) {}
+
+  async getLike(commentId: string) {
+    return this.prismaService.like.findMany({
+      where: {
+        commentId: commentId,
+      },
+    });
+  }
+
+  async getDislike(commentId: string) {
+    return this.prismaService.dislike.findMany({
+      where: {
+        commentId: commentId,
+      },
+    });
+  }
+
   async like(userId: string, commentId: string) {
     const alreadyLiked = await this.prismaService.like.findFirst({
       where: {
